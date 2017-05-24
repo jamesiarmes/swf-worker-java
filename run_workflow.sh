@@ -1,5 +1,5 @@
 # Examples without the -cp option
-export CLASSPATH='target/helloswf-1.0.jar:/home/jarmes/workspace/acquia/aws-java-sdk/libs/*:/home/jarmes/workspace/acquia/aws-java-sdk/third-party/lib/*'
+export CLASSPATH='target/helloswf-1.0.jar:/home/jarmes/workspace/acquia/aws-java-sdk/lib/*:/home/jarmes/workspace/acquia/aws-java-sdk/third-party/lib/*'
 java aws.example.helloswf.HelloTypes
 java aws.example.helloswf.ActivityWorker &
 java aws.example.helloswf.WorkflowWorker &

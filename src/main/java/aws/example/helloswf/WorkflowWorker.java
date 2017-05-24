@@ -114,7 +114,7 @@ public class WorkflowWorker {
                 ScheduleActivityTaskDecisionAttributes attrs =
                     new ScheduleActivityTaskDecisionAttributes()
                         .withActivityType(new ActivityType()
-                            .withName(HelloTypes.ACTIVITY)
+                            .withName(HelloTypes.ACTIVITIES[0])
                             .withVersion(HelloTypes.ACTIVITY_VERSION))
                         .withActivityId(UUID.randomUUID().toString())
                         .withInput(workflow_input);

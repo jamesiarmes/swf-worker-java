@@ -19,12 +19,19 @@ import com.amazonaws.services.simpleworkflow.AmazonSimpleWorkflow;
 import com.amazonaws.services.simpleworkflow.AmazonSimpleWorkflowClientBuilder;
 import com.amazonaws.services.simpleworkflow.model.*;
 
+import java.util.concurrent.TimeUnit;
+
 public class ActivityWorker {
     private static final AmazonSimpleWorkflow swf =
         AmazonSimpleWorkflowClientBuilder.defaultClient();
 
     private static String sayHello(String input) throws Throwable {
         return "Hello, " + input + "!";
+    }
+
+    private static String sleep(Integer time) throws Throwable {
+        TimeUnit.SECONDS.sleep(time);
+        return "Slept for " + time + " seconds.";
     }
 
     public static void main(String[] args) {
@@ -46,9 +53,16 @@ public class ActivityWorker {
                 Throwable error = null;
 
                 try {
-                    System.out.println("Executing the activity task with input '" +
+                    System.out.println("Executing the activity task '" + task.getActivityType().getName() + "' with input '" +
                             task.getInput() + "'.");
-                    result = sayHello(task.getInput());
+                    switch (task.getActivityType().getName()) {
+                        case "HelloActivity":
+                            result = sayHello(task.getInput());
+                            break;
+                        case "SleepActivity":
+                            result = sleep(Integer.parseInt(task.getInput()));
+                            break;
+                    }
                 } catch (Throwable th) {
                     error = th;
                 }

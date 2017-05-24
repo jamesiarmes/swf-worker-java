@@ -24,7 +24,7 @@ public class HelloTypes {
     public static final String TASKLIST = "HelloTasklist";
     public static final String WORKFLOW = "HelloWorkflow";
     public static final String WORKFLOW_VERSION = "1.0";
-    public static final String ACTIVITY = "HelloActivity";
+    public static final String[] ACTIVITIES = {"HelloActivity", "SleepActivity"};
     public static final String ACTIVITY_VERSION = "1.0";
 
     private static final AmazonSimpleWorkflow swf =
@@ -34,28 +34,34 @@ public class HelloTypes {
         try {
             System.out.println("** Registering the domain '" + DOMAIN + "'.");
             swf.registerDomain(new RegisterDomainRequest()
-                .withName(DOMAIN)
-                .withWorkflowExecutionRetentionPeriodInDays("1"));
+                    .withName(DOMAIN)
+                    .withWorkflowExecutionRetentionPeriodInDays("1"));
         } catch (DomainAlreadyExistsException e) {
             System.out.println("** Domain already exists!");
         }
     }
 
-    public static void registerActivityType() {
+    public static void registerActivities() {
+        for (String activity : ACTIVITIES) {
+            registerActivityType(activity);
+        }
+    }
+
+    public static void registerActivityType(String activity) {
         try {
-            System.out.println("** Registering the activity type '" + ACTIVITY +
-                "-" + ACTIVITY_VERSION + "'.");
+            System.out.println("** Registering the activity type '" + activity +
+                    "-" + ACTIVITY_VERSION + "'.");
             swf.registerActivityType(new RegisterActivityTypeRequest()
-                .withDomain(DOMAIN)
-                .withName(ACTIVITY)
-                .withVersion(ACTIVITY_VERSION)
-                .withDefaultTaskList(new TaskList().withName(TASKLIST))
-                .withDefaultTaskScheduleToStartTimeout("30")
-                .withDefaultTaskStartToCloseTimeout("600")
-                .withDefaultTaskScheduleToCloseTimeout("630")
-                .withDefaultTaskHeartbeatTimeout("10"));
+                    .withDomain(DOMAIN)
+                    .withName(activity)
+                    .withVersion(ACTIVITY_VERSION)
+                    .withDefaultTaskList(new TaskList().withName(TASKLIST))
+                    .withDefaultTaskScheduleToStartTimeout("30")
+                    .withDefaultTaskStartToCloseTimeout("600")
+                    .withDefaultTaskScheduleToCloseTimeout("630")
+                    .withDefaultTaskHeartbeatTimeout("10"));
         } catch (TypeAlreadyExistsException e) {
-            System.out.println("** Activity type already exists!");
+            System.out.println("** Activity " + activity + " already exists!");
         }
     }
 
@@ -78,7 +84,7 @@ public class HelloTypes {
     public static void main(String[] args) {
         registerDomain();
         registerWorkflowType();
-        registerActivityType();
+        registerActivities();
     }
 }
 
